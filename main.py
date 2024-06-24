@@ -58,13 +58,16 @@ fig1 = plt.figure(figsize=(10, 8))
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5, linecolor='black')
 
 # Fetch historical data for BTC
-btc_data = get_historical_data(option, end_date)
+_data = get_historical_data(option, end_date)
+
+btc_data = get_historical_data("BTC", end_date)
 
 # Calculate the 25-period SMA
 btc_data['SMA_25'] = btc_data['close'].rolling(window=25).mean()
+_data['SMA_25']    = _data['close'].rolling(window=25).mean()
 
 # Determine the binary trend for BTC
-# Determine the binary trend for BTC
+
 btc_data['SMA_Trend'] = 0
 for i in range(2, len(btc_data)):
     if btc_data['SMA_25'].iloc[i] > btc_data['SMA_25'].iloc[i-1] > btc_data['SMA_25'].iloc[i-2]:
@@ -72,13 +75,22 @@ for i in range(2, len(btc_data)):
     elif btc_data['SMA_25'].iloc[i] < btc_data['SMA_25'].iloc[i-1] < btc_data['SMA_25'].iloc[i-2]:
         btc_data.loc[btc_data.index[i], 'SMA_Trend'] = -1
 
+_data['SMA_Trend'] = 0
+for i in range(2, len(_data)):
+    if _data['SMA_25'].iloc[i] > _data['SMA_25'].iloc[i-1] > _data['SMA_25'].iloc[i-2]:
+        _data.loc[_data.index[i], 'SMA_Trend'] = 1
+    elif _data['SMA_25'].iloc[i] < _data['SMA_25'].iloc[i-1] < _data['SMA_25'].iloc[i-2]:
+        _data.loc[_data.index[i], 'SMA_Trend'] = -1
+
+
+
 # Plot BTC close price and SMA with color change based on trend
 fig2 = plt.figure(figsize=(14, 7))
-plt.plot(btc_data['close'], label=f'{option} Close Price', color='black', linewidth=1)
-sma_color = ['red' if x == -1 else '#5396ec' for x in btc_data['SMA_Trend']]
-plt.plot(btc_data['SMA_25'], label='SMA 25', color='black', linewidth=2, alpha=0.7)
-for i in range(len(btc_data) - 1):
-    plt.plot(btc_data.index[i:i+2], btc_data['SMA_25'].iloc[i:i+2], color=sma_color[i], linewidth=3)
+plt.plot(_data['close'], label=f'{option} Close Price', color='black', linewidth=1)
+sma_color = ['red' if x == -1 else '#5396ec' for x in _data['SMA_Trend']]
+plt.plot(_data['SMA_25'], label='SMA 25', color='black', linewidth=2, alpha=0.7)
+for i in range(len(_data) - 1):
+    plt.plot(_data.index[i:i+2], _data['SMA_25'].iloc[i:i+2], color=sma_color[i], linewidth=3)
 
 plt.title('BTC Close Price with SMA 25')
 plt.legend()
