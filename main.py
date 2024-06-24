@@ -3,19 +3,16 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime
-from functions import get_historical_data, get_market_caps
 import time
+from functions import get_market_caps, get_historical_data
 
-# ------------------------------------------------------------------------------------------------------------------------------------
-#Set Page Configurations
-# ------------------------------------------------------------------------------------------------------------------------------------
+# Set Page Configurations
 st.set_page_config(
-                    page_title = "Correlation Trend",
-                    page_icon  = "📊",
-                    layout     = "wide"
-                                )
+    page_title="Correlation Trend",
+    page_icon="📊",
+    layout="wide"
+)
 [_, c, _] = st.columns([1, 15, 1])
-
 
 # WELCOME
 welcome = c.title("***:blue[Welcome] to Crypto Correlation App***")
@@ -41,13 +38,12 @@ about = open("components/about.txt", "r")
 top_10_cryptos = get_market_caps()
 
 # Define the date range
-start_date = datetime.strptime('2023-01-01', '%Y-%m-%d')
-end_date   = datetime.strptime('2025-12-31', '%Y-%m-%d')
+end_date = datetime.strptime('2050-12-31', '%Y-%m-%d')
 
 # Fetch historical price data for the top 10 cryptocurrencies
 price_data = pd.DataFrame()
 for symbol in top_10_cryptos:
-    data               = get_historical_data(symbol, start_date, end_date)
+    data = get_historical_data(symbol, end_date)
     price_data[symbol] = data['close']
 
 # Calculate the correlation matrix
@@ -58,7 +54,7 @@ fig1 = plt.figure(figsize=(10, 8))
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5, linecolor='black')
 
 # Fetch historical data for BTC
-btc_data = get_historical_data('BTCUSDT', start_date, end_date)
+btc_data = get_historical_data('BTC', end_date)
 
 # Calculate the 25-period SMA
 btc_data['SMA_25'] = btc_data['close'].rolling(window=25).mean()
@@ -87,7 +83,7 @@ plt.legend()
 btc_trend = btc_data['SMA_Trend'].iloc[-1]
 
 # Multiply the correlation values by the BTC trend
-adjusted_trends = round(correlation_matrix['BTCUSDT'] * btc_trend,2)
+adjusted_trends = round(correlation_matrix['BTC'] * btc_trend,2)
 
 # Create a DataFrame to display the results
 trend_table = pd.DataFrame({
