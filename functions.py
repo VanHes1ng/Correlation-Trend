@@ -36,3 +36,12 @@ def get_historical_data(symbol, end_date):
         df.set_index('time', inplace=True)
     return df
 
+def get_trend_val(_data):
+    _data['SMA_Trend'] = 0
+    for i in range(2, len(_data)):
+        if _data['SMA_25'].iloc[i] > _data['SMA_25'].iloc[i-1] > _data['SMA_25'].iloc[i-2]:
+            _data.loc[_data.index[i], 'SMA_Trend'] = 1
+        elif _data['SMA_25'].iloc[i] < _data['SMA_25'].iloc[i-1] < _data['SMA_25'].iloc[i-2]:
+            _data.loc[_data.index[i], 'SMA_Trend'] = -1
+            
+    return _data['SMA_Trend']
