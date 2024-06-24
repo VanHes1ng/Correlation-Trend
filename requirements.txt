@@ -4,3 +4,4 @@ matplotlib
 python-binance
 seaborn
 pandas
+cryptocompare
