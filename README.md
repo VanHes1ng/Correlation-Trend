@@ -1,5 +1,6 @@
 ### Correlation Trend Application
 
+![plot](components/main.png)
 This Streamlit-based web application allows users to analyze the correlation trends of the top 10 cryptocurrencies in relation to Bitcoin (BTC) and visualize these trends in a table.
 
 #### Key Features:
