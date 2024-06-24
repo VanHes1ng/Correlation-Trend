@@ -1,26 +1,23 @@
 import pandas as pd
-from binance.client import Client
+
 import streamlit as st
-# Initialize the Binance client
-client = Client()
+import cryptocompare
 
 # Function to fetch market cap data from Binance
 def get_market_caps():
-    info = client.get_all_tickers()
-    prices = {item['symbol']: float(item['price']) for item in info if item['symbol'].endswith('USDT')}
-    
+
     # Assuming we have a dictionary with market caps for the sake of this example
     market_caps = {
-        'BTCUSDT': 1000000000,
-        'ETHUSDT': 200000000,
-        'BNBUSDT': 50000000,
-        'ADAUSDT': 30000000,
-        'SOLUSDT': 25000000,
-        'XRPUSDT': 23000000,
-        'DOTUSDT': 22000000,
-        'DOGEUSDT':20000000,
-        'UNIUSDT': 19000000,
-        'LTCUSDT': 18000000
+        'BTC': 1000000000,
+        'ETH': 200000000,
+        'BNB': 50000000,
+        'ADA': 30000000,
+        'SOL': 25000000,
+        'XRP': 23000000,
+        'DOT': 22000000,
+        'DOGE':20000000,
+        'UNI': 19000000,
+        'LTC': 18000000
     }
 
     sorted_symbols = sorted(market_caps, key=market_caps.get, reverse=True)[:10]
@@ -30,10 +27,12 @@ def get_market_caps():
 
 # Function to fetch historical data from Binance
 @st.cache_data
-def get_historical_data(symbol, start, end):
-    klines = client.get_historical_klines(symbol, Client.KLINE_INTERVAL_1DAY, start.strftime('%d %b %Y'), end.strftime('%d %b %Y'))
-    data = pd.DataFrame(klines, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'number_of_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore'])
-    data['timestamp'] = pd.to_datetime(data['timestamp'], unit='ms')
-    data.set_index('timestamp', inplace=True)
-    data = data[['close']].astype(float)
-    return data
+def get_historical_data(symbol, end_date):
+    cryptocompare.cryptocompare._set_api_key_parameter("8fcc98eb2d8de315ea41c547c2565e23773f9ec70d79d89546680c8820203821")
+    data = cryptocompare.get_historical_price_day(symbol, currency='USD', toTs=end_date, limit=365)
+    df = pd.DataFrame(data)
+    if 'time' in df.columns:
+        df['time'] = pd.to_datetime(df['time'], unit='s')
+        df.set_index('time', inplace=True)
+    return df
+
