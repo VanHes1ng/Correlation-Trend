@@ -35,7 +35,7 @@ c.title("***:blue[Crypto] Correlation App***")
 about = open("components/about.txt", "r")
 
 option = c.selectbox(
-    "Which Coin would you like to be Used as a main?",
+    "Which Coin would you like to be ploted?",
     ("BTC", "ETH", "BNB", "ADA", "SOL", "XRP", "DOT", "DOGE", "UNI", "LTC"))
 
 # Get market cap data
@@ -74,7 +74,7 @@ for i in range(2, len(btc_data)):
 
 # Plot BTC close price and SMA with color change based on trend
 fig2 = plt.figure(figsize=(14, 7))
-plt.plot(btc_data['close'], label='BTC Close Price', color='black', linewidth=1)
+plt.plot(btc_data['close'], label=f'{option} Close Price', color='black', linewidth=1)
 sma_color = ['red' if x == -1 else '#5396ec' for x in btc_data['SMA_Trend']]
 plt.plot(btc_data['SMA_25'], label='SMA 25', color='black', linewidth=2, alpha=0.7)
 for i in range(len(btc_data) - 1):
