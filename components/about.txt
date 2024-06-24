@@ -1,6 +1,6 @@
 ### Correlation Trend Application
 
-This Streamlit-based web application allows users to analyze the correlation trends of the top 10 cryptocurrencies in relation to Selected Coin and visualize these trends in a table.
+This Streamlit-based web application allows users to analyze the correlation trends of the top 10 cryptocurrencies in relation to Bitcoin (BTC) and visualize these trends in a table.
 
 #### Key Features:
 
@@ -19,15 +19,14 @@ This Streamlit-based web application allows users to analyze the correlation tre
 4. **Coins Trend Analysis**:
    - Fetches historical price data for coins.
    - Calculates the 25-period Simple Moving Average (SMA) for coins.
-   - Determines the binary trend for coins based on the SMA, categorizing the trend as:
+   - Determines the binary trend for BTC based on the SMA, categorizing the trend as:
      - 1 (upward trend) if the current SMA value is higher than the previous two values.
      - -1 (downward trend) if the current SMA value is lower than the previous two values.
 
 5. **Adjusted Trend Calculation**:
-   - Multiplies the correlation values by the coins trend to get adjusted trend values.
+   - Multiplies the correlation values by the BTC trend to get adjusted trend values.
    - Creates a DataFrame to display the adjusted trend values for each cryptocurrency.
    - Calculates the average of the adjusted trend values.
-![plot](components/scores.png)
 
 6. **Additional Information**:
    - Show AVG of all Adjusted Trend Values, which is an overall Crypto Market Trend
