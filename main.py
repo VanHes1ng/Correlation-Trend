@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime
 import time
-from functions import get_market_caps, get_historical_data
+from functions import get_market_caps, get_historical_data, get_trend_val
 
 # Set Page Configurations
 st.set_page_config(
@@ -67,22 +67,8 @@ btc_data['SMA_25'] = btc_data['close'].rolling(window=25).mean()
 _data['SMA_25']    = _data['close'].rolling(window=25).mean()
 
 # Determine the binary trend for BTC
-
-btc_data['SMA_Trend'] = 0
-for i in range(2, len(btc_data)):
-    if btc_data['SMA_25'].iloc[i] > btc_data['SMA_25'].iloc[i-1] > btc_data['SMA_25'].iloc[i-2]:
-        btc_data.loc[btc_data.index[i], 'SMA_Trend'] = 1
-    elif btc_data['SMA_25'].iloc[i] < btc_data['SMA_25'].iloc[i-1] < btc_data['SMA_25'].iloc[i-2]:
-        btc_data.loc[btc_data.index[i], 'SMA_Trend'] = -1
-
-_data['SMA_Trend'] = 0
-for i in range(2, len(_data)):
-    if _data['SMA_25'].iloc[i] > _data['SMA_25'].iloc[i-1] > _data['SMA_25'].iloc[i-2]:
-        _data.loc[_data.index[i], 'SMA_Trend'] = 1
-    elif _data['SMA_25'].iloc[i] < _data['SMA_25'].iloc[i-1] < _data['SMA_25'].iloc[i-2]:
-        _data.loc[_data.index[i], 'SMA_Trend'] = -1
-
-
+btc_data['SMA_Trend']= get_trend_val(btc_data)
+_data['SMA_Trend']   = get_trend_val(_data)
 
 # Plot BTC close price and SMA with color change based on trend
 fig2 = plt.figure(figsize=(14, 7))
@@ -92,7 +78,7 @@ plt.plot(_data['SMA_25'], label='SMA 25', color='black', linewidth=2, alpha=0.7)
 for i in range(len(_data) - 1):
     plt.plot(_data.index[i:i+2], _data['SMA_25'].iloc[i:i+2], color=sma_color[i], linewidth=3)
 
-plt.title('BTC Close Price with SMA 25')
+plt.title(f'{option} Close Price with SMA 25')
 plt.legend()
 
 # Get the last value of BTC trend
