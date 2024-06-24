@@ -1,6 +1,6 @@
 streamlit
 numpy
 matplotlib
-binance
+python-binance
 seaborn
 pandas
