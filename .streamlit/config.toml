@@ -1,3 +1,4 @@
 [theme]
 backgroundColor = "black"
 textColor = "white"
+secondaryBackgroundColor = "#3b3b3b"
