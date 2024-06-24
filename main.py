@@ -34,6 +34,10 @@ c.title("***:blue[Crypto] Correlation App***")
 
 about = open("components/about.txt", "r")
 
+option = c.selectbox(
+    "Which Coin would you like to be Used as a main?",
+    ("BTC", "ETH", "BNB", "ADA", "SOL", "XRP", "DOT", "DOGE", "UNI", "LTC"))
+
 # Get market cap data
 top_10_cryptos = get_market_caps()
 
@@ -54,7 +58,7 @@ fig1 = plt.figure(figsize=(10, 8))
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5, linecolor='black')
 
 # Fetch historical data for BTC
-btc_data = get_historical_data('BTC', end_date)
+btc_data = get_historical_data(option, end_date)
 
 # Calculate the 25-period SMA
 btc_data['SMA_25'] = btc_data['close'].rolling(window=25).mean()
@@ -98,7 +102,7 @@ with c:
 
     c1.subheader("Correlation Top :blue[10]")
     c1.pyplot(fig1, use_container_width = True)
-    c2.subheader(":orange[BTC] TREND")
+    c2.subheader(f":orange[{option}] TREND")
     c2.pyplot(fig2, use_container_width = True)
     c1.divider()
     c2.divider()
