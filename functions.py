@@ -26,7 +26,6 @@ def get_market_caps():
 
 
 # Function to fetch historical data from Binance
-@st.cache_data
 def get_historical_data(symbol, end_date):
     cryptocompare.cryptocompare._set_api_key_parameter("8fcc98eb2d8de315ea41c547c2565e23773f9ec70d79d89546680c8820203821")
     data = cryptocompare.get_historical_price_day(symbol, currency='USD', toTs=end_date, limit=365)
